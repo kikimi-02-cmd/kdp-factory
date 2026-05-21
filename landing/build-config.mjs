@@ -6,7 +6,7 @@
  *   STRIPE_PAYMENT_LINK_CORPORATE   法人プランの Stripe Payment Link
  *
  * Vercel など静的ホスティングでは Build Command としてこれを実行する。
- *   node landing/build-config.js
+ *   node build-config.mjs
  *
  * env が未設定でも失敗しない (config.js は空設定で出力 → CTA は「準備中」表示)。
  * 秘密情報ではないため config.js の内容はクライアントに配信される。
