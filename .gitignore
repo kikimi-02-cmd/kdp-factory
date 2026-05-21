@@ -6,3 +6,6 @@ output
 .DS_Store
 *.log
 coverage
+
+# landing build artifact (generated from env by build-config.js)
+landing/config.js
