@@ -1,0 +1,42 @@
+{
+  "schema": "uaif/config-v1",
+  "product": "kdp-factory",
+  "enabled": false,
+  "mode": "shadow",
+  "autonomy": "balanced",
+  "cadence_cron": "0 23 * * 1",
+  "north_star": "月次出版冊数とロングテール印税の最大化 — 毎週 generate した本の冊数と KDP ダッシュボード上の累計印税額",
+  "guardrails": [
+    "量産テンプレート（sudoku レイアウト・メタデータ schema）との整合性を破壊しない",
+    "KDP コンテンツポリシーおよび Amazon 出版ガイドラインに準拠したコンテンツのみ生成する",
+    "metadata.json の必須フィールド（title, subtitle, description, keywords, BISAC, trim size, page count）の欠損・型破壊を起こさない",
+    "interior.pdf の印刷仕様（8.5×11 in、マージン 0.5 in）を変更しない",
+    "KDP アカウントへの自動アップロード・publish は絶対に行わない（ファイル出力のみ）"
+  ],
+  "verify": {
+    "install": "npm ci",
+    "build": "",
+    "lint": "",
+    "test": "npm test",
+    "typecheck": "npm run typecheck"
+  },
+  "telemetry": ["recent commits", "open issues", "test results", "output/ 生成ファイル数"],
+  "token_budget_usd": 2.0,
+  "max_open_prs": 1,
+  "irreversible_keywords": [
+    "price",
+    "pricing",
+    "payment",
+    "delete",
+    "drop table",
+    "schema",
+    "auth",
+    "public claim",
+    "spend",
+    "KDP account",
+    "publish",
+    "upload to KDP",
+    "submit to Amazon"
+  ],
+  "council_route": "honnex.app/admin/council"
+}
