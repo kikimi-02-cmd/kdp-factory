@@ -1,8 +1,8 @@
 {
   "schema": "uaif/config-v1",
   "product": "kdp-factory",
-  "enabled": false,
-  "mode": "shadow",
+  "enabled": true,
+  "mode": "live",
   "autonomy": "balanced",
   "cadence_cron": "0 23 * * 1",
   "north_star": "月次出版冊数とロングテール印税の最大化 — 毎週 generate した本の冊数と KDP ダッシュボード上の累計印税額",
