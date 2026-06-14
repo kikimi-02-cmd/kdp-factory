@@ -1,5 +1,6 @@
-// KDP listing metadata generation for a sudoku book.
+// KDP listing metadata generation for sudoku / word-search books.
 import type { Difficulty } from "./sudoku.js";
+import type { WSDifficulty } from "./wordsearch.js";
 
 export interface KdpMetadata {
   title: string;
@@ -68,6 +69,77 @@ export function buildMetadata(input: MetadataInput): KdpMetadata {
   const bisacCategories = [
     "Games & Activities / Puzzles",
     "Games & Activities / Logic & Brain Teasers",
+  ];
+
+  return {
+    title,
+    subtitle,
+    description,
+    author,
+    keywords,
+    bisacCategories,
+    trimSize: "8.5 x 11 in",
+    pageCount: input.pageCount,
+    interiorPath: input.interiorPath,
+    language: "English",
+    puzzleCount: input.puzzleCount,
+    difficulty: diffLabel,
+  };
+}
+
+export interface WordSearchMetadataInput {
+  author?: string;
+  puzzleCount: number;
+  difficulty: WSDifficulty | "mixed";
+  pageCount: number;
+  interiorPath: string;
+  bookNumber?: number;
+  themes?: string[]; // distinct themes used across the book
+}
+
+function wsDifficultyLabel(d: WSDifficulty | "mixed"): string {
+  switch (d) {
+    case "easy":
+      return "Easy";
+    case "medium":
+      return "Medium";
+    case "hard":
+      return "Hard";
+    case "mixed":
+      return "Easy to Hard";
+  }
+}
+
+export function buildWordSearchMetadata(
+  input: WordSearchMetadataInput,
+): KdpMetadata {
+  const author = input.author ?? DEFAULT_AUTHOR;
+  const diffLabel = wsDifficultyLabel(input.difficulty);
+  const vol = input.bookNumber ? ` Vol. ${input.bookNumber}` : "";
+
+  const title = `Word Search Puzzle Book${vol}`;
+  const subtitle = `${input.puzzleCount} ${diffLabel} Word Search Puzzles for Adults with Solutions`;
+
+  const description = [
+    `Relax and stay sharp with ${input.puzzleCount} themed word search puzzles ranging across ${diffLabel.toLowerCase()} difficulty.`,
+    `Every word is guaranteed to be hidden in its grid, with a full answer key listing each word's location.`,
+    `Printed one puzzle per page on large, easy-to-read letter grids, with the theme word list right below each puzzle.`,
+    `A perfect gift for word puzzle lovers, travelers, and anyone who wants a calming brain workout.`,
+  ].join(" ");
+
+  const keywords = [
+    "word search puzzle book",
+    "word search for adults",
+    `${diffLabel.toLowerCase()} word search`,
+    "brain games",
+    "word find puzzles",
+    "large print word search",
+    "puzzle book with solutions",
+  ];
+
+  const bisacCategories = [
+    "Games & Activities / Puzzles",
+    "Games & Activities / Word & Word Search",
   ];
 
   return {
