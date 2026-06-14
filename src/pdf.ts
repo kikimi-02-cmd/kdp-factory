@@ -1,6 +1,8 @@
-// Render a sudoku puzzle book interior to a print-ready PDF using pdf-lib.
+// Render a sudoku / word-search puzzle book interior to a print-ready PDF
+// using pdf-lib.
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
 import type { Grid, Difficulty } from "./sudoku.js";
+import type { WordSearchPuzzle, WSDifficulty } from "./wordsearch.js";
 
 // KDP 8.5" x 11" trim at 72 dpi.
 const PAGE_W = 8.5 * 72; // 612
@@ -157,6 +159,146 @@ export async function renderBookPdf(spec: BookSpec): Promise<Uint8Array> {
       const gyTop = labelY - 6 - solGridSize;
       drawGrid(page, p.solution, font, { x, y: gyTop, size: solGridSize });
     });
+  }
+
+  return doc.save();
+}
+
+// ---------------------------------------------------------------------------
+// Word-search interior
+// ---------------------------------------------------------------------------
+
+export interface WordSearchBookPuzzle {
+  index: number; // 1-based puzzle number
+  puzzle: WordSearchPuzzle;
+}
+
+export interface WordSearchBookSpec {
+  title: string;
+  subtitle: string;
+  author: string;
+  puzzles: WordSearchBookPuzzle[];
+}
+
+function drawLetterGrid(
+  page: PDFPage,
+  puzzle: WordSearchPuzzle,
+  font: PDFFont,
+  layout: GridLayout,
+): void {
+  const { x, y, size } = layout;
+  const n = puzzle.size;
+  const cell = size / n;
+  const fontSize = Math.min(cell * 0.6, 18);
+  for (let r = 0; r < n; r++) {
+    for (let c = 0; c < n; c++) {
+      const letter = puzzle.grid[r * n + c];
+      const tw = font.widthOfTextAtSize(letter, fontSize);
+      const th = font.heightAtSize(fontSize);
+      const cx = x + c * cell + (cell - tw) / 2;
+      // row 0 at top
+      const cy = y + size - (r + 1) * cell + (cell - th) / 2 + th * 0.18;
+      page.drawText(letter, { x: cx, y: cy, size: fontSize, font, color: BLACK });
+    }
+  }
+}
+
+/** Draw the theme word list under a grid; returns the y reached. */
+function drawWordList(
+  page: PDFPage,
+  words: string[],
+  font: PDFFont,
+  startY: number,
+): void {
+  const cols = 4;
+  const colW = (PAGE_W - 2 * MARGIN) / cols;
+  const rowH = 16;
+  words.forEach((w, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    page.drawText(w, {
+      x: MARGIN + col * colW,
+      y: startY - row * rowH,
+      size: 11,
+      font,
+      color: BLACK,
+    });
+  });
+}
+
+export async function renderWordSearchPdf(
+  spec: WordSearchBookSpec,
+): Promise<Uint8Array> {
+  const doc = await PDFDocument.create();
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+
+  // ---- Title page ----
+  const title = doc.addPage([PAGE_W, PAGE_H]);
+  drawCenteredText(title, spec.title, PAGE_H - 3 * 72, fontBold, 30);
+  if (spec.subtitle) {
+    drawCenteredText(title, spec.subtitle, PAGE_H - 3.7 * 72, font, 16, GRAY);
+  }
+  drawCenteredText(title, `${spec.puzzles.length} Puzzles`, PAGE_H / 2, font, 14, GRAY);
+  drawCenteredText(title, spec.author, MARGIN + 36, font, 12, GRAY);
+
+  // ---- Puzzle pages: 1 grid + word list per page ----
+  const gridSize = PAGE_W - 2 * MARGIN - 1.0 * 72;
+  const gx = (PAGE_W - gridSize) / 2;
+  for (const p of spec.puzzles) {
+    const page = doc.addPage([PAGE_W, PAGE_H]);
+    drawCenteredText(page, `Puzzle ${p.index}`, PAGE_H - MARGIN - 30, fontBold, 20);
+    drawCenteredText(
+      page,
+      `${p.puzzle.theme.toUpperCase()} • ${p.puzzle.difficulty.toUpperCase()}`,
+      PAGE_H - MARGIN - 52,
+      font,
+      11,
+      GRAY,
+    );
+    const gy = PAGE_H - MARGIN - 80 - gridSize;
+    drawLetterGrid(page, p.puzzle, font, { x: gx, y: gy, size: gridSize });
+    drawWordList(page, p.puzzle.words, font, gy - 24);
+  }
+
+  // ---- Solutions section ----
+  const solDivider = doc.addPage([PAGE_W, PAGE_H]);
+  drawCenteredText(solDivider, "Solutions", PAGE_H / 2, fontBold, 28);
+
+  // List each puzzle's words + start coordinates (1-based row,col) + direction.
+  const dirLabel = (dr: number, dc: number): string => {
+    const v = dr === 0 ? "" : dr > 0 ? "down" : "up";
+    const h = dc === 0 ? "" : dc > 0 ? "right" : "left";
+    return [v, h].filter(Boolean).join("-") || "?";
+  };
+  let page = doc.addPage([PAGE_W, PAGE_H]);
+  drawCenteredText(page, "Solutions", PAGE_H - MARGIN - 24, fontBold, 16);
+  let yCursor = PAGE_H - MARGIN - 50;
+  const lineH = 13;
+  for (const p of spec.puzzles) {
+    // estimate block height
+    const block = lineH * (p.puzzle.placements.length + 2);
+    if (yCursor - block < MARGIN) {
+      page = doc.addPage([PAGE_W, PAGE_H]);
+      drawCenteredText(page, "Solutions", PAGE_H - MARGIN - 24, fontBold, 16);
+      yCursor = PAGE_H - MARGIN - 50;
+    }
+    page.drawText(`Puzzle ${p.index}`, {
+      x: MARGIN,
+      y: yCursor,
+      size: 12,
+      font: fontBold,
+      color: BLACK,
+    });
+    yCursor -= lineH + 2;
+    for (const pl of p.puzzle.placements) {
+      page.drawText(
+        `${pl.word}  (row ${pl.row + 1}, col ${pl.col + 1}, ${dirLabel(pl.dRow, pl.dCol)})`,
+        { x: MARGIN + 12, y: yCursor, size: 10, font, color: GRAY },
+      );
+      yCursor -= lineH;
+    }
+    yCursor -= lineH;
   }
 
   return doc.save();
