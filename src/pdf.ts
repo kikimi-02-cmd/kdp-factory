@@ -178,6 +178,114 @@ export async function renderBookPdf(spec: BookSpec): Promise<Uint8Array> {
 }
 
 // ---------------------------------------------------------------------------
+// Full-wrap paperback cover (KDP spec)
+// ---------------------------------------------------------------------------
+
+export interface CoverSpec {
+  title: string;
+  subtitle: string;
+  author: string;
+  backBlurb: string;
+  pageCount: number;
+  paper?: "white" | "cream"; // interior paper → spine thickness
+  accentIndex?: number; // rotate palette for batch variety
+}
+
+// KDP paperback wrap math (https://kdp.amazon.com/help → cover dimensions):
+//   bleed 0.125" all sides; spine = pageCount × per-page thickness.
+//   B&W on white = 0.002252"/page, cream = 0.0025"/page.
+//   full width  = 2·bleed + 2·trimW + spine ; full height = trimH + 2·bleed.
+//   Spine text is only allowed at ≥100 pages, so we leave the spine blank here.
+const COVER_PALETTES = [
+  { bg: rgb(0.07, 0.11, 0.21), ink: rgb(0.96, 0.94, 0.87), accent: rgb(0.88, 0.6, 0.2) }, // navy / gold
+  { bg: rgb(0.09, 0.17, 0.15), ink: rgb(0.96, 0.95, 0.9), accent: rgb(0.85, 0.42, 0.38) }, // forest / coral
+  { bg: rgb(0.15, 0.1, 0.2), ink: rgb(0.96, 0.94, 0.92), accent: rgb(0.5, 0.66, 0.84) }, // plum / blue
+];
+
+function wrapLines(text: string, font: PDFFont, size: number, maxW: number): string[] {
+  const words = text.split(/\s+/);
+  const lines: string[] = [];
+  let cur = "";
+  for (const w of words) {
+    const trial = cur ? `${cur} ${w}` : w;
+    if (font.widthOfTextAtSize(trial, size) > maxW && cur) {
+      lines.push(cur);
+      cur = w;
+    } else {
+      cur = trial;
+    }
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+export async function renderCoverPdf(spec: CoverSpec): Promise<Uint8Array> {
+  const BLEED = 0.125 * 72;
+  const TRIM_W = PAGE_W; // 8.5"
+  const TRIM_H = PAGE_H; // 11"
+  const perPage = spec.paper === "cream" ? 0.0025 : 0.002252;
+  const spine = spec.pageCount * perPage * 72;
+  const fullW = 2 * BLEED + 2 * TRIM_W + spine;
+  const fullH = TRIM_H + 2 * BLEED;
+  const pal = COVER_PALETTES[(spec.accentIndex ?? 0) % COVER_PALETTES.length];
+  const SAFE = 0.25 * 72; // keep text ≥0.25" from trim edges
+
+  const doc = await PDFDocument.create();
+  const page = doc.addPage([fullW, fullH]);
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+
+  page.drawRectangle({ x: 0, y: 0, width: fullW, height: fullH, color: pal.bg });
+
+  // Front cover = right trim panel.
+  const frontX = BLEED + TRIM_W + spine;
+  const fLeft = frontX + SAFE;
+  const fRight = frontX + TRIM_W - SAFE;
+  const fW = fRight - fLeft;
+
+  // accent bands top & bottom of front
+  page.drawRectangle({ x: frontX, y: fullH - BLEED - 90, width: TRIM_W, height: 10, color: pal.accent });
+  page.drawRectangle({ x: frontX, y: BLEED + 80, width: TRIM_W, height: 10, color: pal.accent });
+
+  // Title (wrapped, bold, large) centered in upper third
+  const titleSize = 46;
+  const tLines = wrapLines(spec.title, fontBold, titleSize, fW);
+  let ty = fullH - BLEED - 200;
+  for (const ln of tLines) {
+    const w = fontBold.widthOfTextAtSize(ln, titleSize);
+    page.drawText(ln, { x: frontX + (TRIM_W - w) / 2, y: ty, size: titleSize, font: fontBold, color: pal.ink });
+    ty -= titleSize * 1.12;
+  }
+
+  // Subtitle
+  const subSize = 18;
+  const sLines = wrapLines(spec.subtitle, font, subSize, fW);
+  ty -= 24;
+  for (const ln of sLines) {
+    const w = font.widthOfTextAtSize(ln, subSize);
+    page.drawText(ln, { x: frontX + (TRIM_W - w) / 2, y: ty, size: subSize, font, color: pal.accent });
+    ty -= subSize * 1.3;
+  }
+
+  // Author (bottom of front)
+  const aSize = 20;
+  const aw = fontBold.widthOfTextAtSize(spec.author, aSize);
+  page.drawText(spec.author, { x: frontX + (TRIM_W - aw) / 2, y: BLEED + 110, size: aSize, font: fontBold, color: pal.ink });
+
+  // Back cover = left trim panel: blurb.
+  const bLeft = BLEED + SAFE;
+  const bSize = 13;
+  const bLines = wrapLines(spec.backBlurb, font, bSize, TRIM_W - 2 * SAFE);
+  let by = fullH - BLEED - SAFE - 40;
+  for (const ln of bLines) {
+    page.drawText(ln, { x: bLeft, y: by, size: bSize, font, color: pal.ink });
+    by -= bSize * 1.5;
+  }
+
+  return doc.save();
+}
+
+// ---------------------------------------------------------------------------
 // Word-search interior
 // ---------------------------------------------------------------------------
 

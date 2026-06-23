@@ -10,6 +10,7 @@ import {
 } from "./wordsearch.js";
 import {
   renderBookPdf,
+  renderCoverPdf,
   renderWordSearchPdf,
   type BookPuzzle,
   type WordSearchBookPuzzle,
@@ -192,9 +193,19 @@ async function generateSudokuBook(a: BookArgs): Promise<BookRecord> {
     bookNumber: a.bookNumber,
   });
 
+  const coverBytes = await renderCoverPdf({
+    title,
+    subtitle,
+    author: a.author ?? "Puzzle Press",
+    backBlurb: metadata.description,
+    pageCount,
+    accentIndex: a.bookNumber - 1,
+  });
+  await writeFile(join(a.outDir, "cover.pdf"), coverBytes);
+
   await writeFile(
     join(a.outDir, "metadata.json"),
-    JSON.stringify(metadata, null, 2),
+    JSON.stringify({ ...metadata, coverPath: "cover.pdf" }, null, 2),
     "utf8",
   );
 
