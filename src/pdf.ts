@@ -135,9 +135,22 @@ export async function renderBookPdf(spec: BookSpec): Promise<Uint8Array> {
   const COLS = 2;
   const ROWS = 3;
   const perPage = COLS * ROWS;
-  const solGridSize = (PAGE_W - 2 * MARGIN - 0.4 * 72) / COLS - 12;
-  const colGap = (PAGE_W - 2 * MARGIN - COLS * solGridSize) / (COLS + 1);
   const rowAreaH = (PAGE_H - 2 * MARGIN - 40) / ROWS;
+  // Grid must fit BOTH the column width AND the row height. Previously this was
+  // sized by width only (≈244pt), but each row only gets ≈227pt tall, so square
+  // grids bled ~37pt into the row below → solutions overlapped. Constrain to the
+  // smaller of the two. `LABEL_H` = "#n" label (14) + gap (6) + padding (6).
+  const LABEL_H = 26;
+  const widthBased = (PAGE_W - 2 * MARGIN - 0.4 * 72) / COLS - 12;
+  const heightBased = rowAreaH - LABEL_H;
+  const solGridSize = Math.min(widthBased, heightBased);
+  // Guard: a row's content must never exceed its allotted height (overlap = unsellable book).
+  if (solGridSize + LABEL_H > rowAreaH + 0.5) {
+    throw new Error(
+      `solution grid overflow: grid ${solGridSize.toFixed(1)} + label ${LABEL_H} > row ${rowAreaH.toFixed(1)}`,
+    );
+  }
+  const colGap = (PAGE_W - 2 * MARGIN - COLS * solGridSize) / (COLS + 1);
 
   for (let i = 0; i < spec.puzzles.length; i += perPage) {
     const page = doc.addPage([PAGE_W, PAGE_H]);

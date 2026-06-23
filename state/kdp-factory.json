@@ -230,7 +230,37 @@
       "puzzle_count": 50,
       "page_count": 61,
       "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260623230427-001",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 1",
+      "created_at": "2026-06-23T23:04:29.296Z",
+      "output_path": "output/sudoku/20260623230427-001",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260623230427-002",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 2",
+      "created_at": "2026-06-23T23:04:30.750Z",
+      "output_path": "output/sudoku/20260623230427-002",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260623230427-003",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 3",
+      "created_at": "2026-06-23T23:04:31.648Z",
+      "output_path": "output/sudoku/20260623230427-003",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
     }
   ],
-  "last_batch_at": "2026-06-23T16:12:34.654Z"
+  "last_batch_at": "2026-06-23T23:04:27.326Z"
 }
