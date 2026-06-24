@@ -276,9 +276,19 @@ async function generateWordSearchBook(a: BookArgs): Promise<BookRecord> {
     themes: [...themesUsed],
   });
 
+  const coverBytes = await renderCoverPdf({
+    title,
+    subtitle,
+    author: a.author ?? "Puzzle Press",
+    backBlurb: metadata.description,
+    pageCount,
+    accentIndex: a.bookNumber - 1,
+  });
+  await writeFile(join(a.outDir, "cover.pdf"), coverBytes);
+
   await writeFile(
     join(a.outDir, "metadata.json"),
-    JSON.stringify(metadata, null, 2),
+    JSON.stringify({ ...metadata, coverPath: "cover.pdf" }, null, 2),
     "utf8",
   );
 
