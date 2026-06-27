@@ -410,7 +410,267 @@
       "puzzle_count": 50,
       "page_count": 59,
       "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225253-001",
+      "category": "sudoku",
+      "title": "Easy Sudoku for Beginners Vol. 1",
+      "created_at": "2026-06-27T22:52:53.998Z",
+      "output_path": "output/sudoku/20260627225253-001",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy"
+    },
+    {
+      "id": "20260627225253-002",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 1",
+      "created_at": "2026-06-27T22:52:54.400Z",
+      "output_path": "output/sudoku/20260627225253-002",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Medium"
+    },
+    {
+      "id": "20260627225253-003",
+      "category": "sudoku",
+      "title": "Hard Sudoku for Experts Vol. 1",
+      "created_at": "2026-06-27T22:52:58.858Z",
+      "output_path": "output/sudoku/20260627225253-003",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Hard"
+    },
+    {
+      "id": "20260627225253-004",
+      "category": "sudoku",
+      "title": "Sudoku Easy to Hard Vol. 1",
+      "created_at": "2026-06-27T22:53:00.546Z",
+      "output_path": "output/sudoku/20260627225253-004",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225253-005",
+      "category": "sudoku",
+      "title": "Large Print Sudoku for Seniors Vol. 1",
+      "created_at": "2026-06-27T22:53:00.803Z",
+      "output_path": "output/sudoku/20260627225253-005",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy"
+    },
+    {
+      "id": "20260627225253-006",
+      "category": "sudoku",
+      "title": "Large Print Sudoku Vol. 1",
+      "created_at": "2026-06-27T22:53:01.221Z",
+      "output_path": "output/sudoku/20260627225253-006",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Medium"
+    },
+    {
+      "id": "20260627225253-007",
+      "category": "sudoku",
+      "title": "Large Print Hard Sudoku Vol. 1",
+      "created_at": "2026-06-27T22:53:05.026Z",
+      "output_path": "output/sudoku/20260627225253-007",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Hard"
+    },
+    {
+      "id": "20260627225253-008",
+      "category": "sudoku",
+      "title": "Large Print Sudoku for Seniors Vol. 1",
+      "created_at": "2026-06-27T22:53:05.817Z",
+      "output_path": "output/sudoku/20260627225253-008",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225253-009",
+      "category": "word-search",
+      "title": "Animal Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:06.081Z",
+      "output_path": "output/word-search/20260627225253-009",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225253-010",
+      "category": "word-search",
+      "title": "Fruit Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:06.303Z",
+      "output_path": "output/word-search/20260627225253-010",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225253-011",
+      "category": "word-search",
+      "title": "Ocean Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:06.526Z",
+      "output_path": "output/word-search/20260627225253-011",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225253-012",
+      "category": "word-search",
+      "title": "Weather Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:06.772Z",
+      "output_path": "output/word-search/20260627225253-012",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225253-013",
+      "category": "word-search",
+      "title": "Kitchen Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:06.996Z",
+      "output_path": "output/word-search/20260627225253-013",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225346-001",
+      "category": "sudoku",
+      "title": "Easy Sudoku for Beginners Vol. 1",
+      "created_at": "2026-06-27T22:53:46.768Z",
+      "output_path": "output/sudoku/20260627225346-001",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy"
+    },
+    {
+      "id": "20260627225346-002",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 1",
+      "created_at": "2026-06-27T22:53:47.229Z",
+      "output_path": "output/sudoku/20260627225346-002",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Medium"
+    },
+    {
+      "id": "20260627225346-003",
+      "category": "sudoku",
+      "title": "Hard Sudoku for Experts Vol. 1",
+      "created_at": "2026-06-27T22:53:51.020Z",
+      "output_path": "output/sudoku/20260627225346-003",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Hard"
+    },
+    {
+      "id": "20260627225346-004",
+      "category": "sudoku",
+      "title": "Sudoku Easy to Hard Vol. 1",
+      "created_at": "2026-06-27T22:53:52.581Z",
+      "output_path": "output/sudoku/20260627225346-004",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225346-005",
+      "category": "sudoku",
+      "title": "Easy Large Print Sudoku for Seniors Vol. 1",
+      "created_at": "2026-06-27T22:53:52.784Z",
+      "output_path": "output/sudoku/20260627225346-005",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy"
+    },
+    {
+      "id": "20260627225346-006",
+      "category": "sudoku",
+      "title": "Large Print Sudoku Vol. 1",
+      "created_at": "2026-06-27T22:53:53.152Z",
+      "output_path": "output/sudoku/20260627225346-006",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Medium"
+    },
+    {
+      "id": "20260627225346-007",
+      "category": "sudoku",
+      "title": "Large Print Hard Sudoku Vol. 1",
+      "created_at": "2026-06-27T22:53:57.114Z",
+      "output_path": "output/sudoku/20260627225346-007",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Hard"
+    },
+    {
+      "id": "20260627225346-008",
+      "category": "sudoku",
+      "title": "Large Print Sudoku for Seniors Vol. 1",
+      "created_at": "2026-06-27T22:53:59.175Z",
+      "output_path": "output/sudoku/20260627225346-008",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225346-009",
+      "category": "word-search",
+      "title": "Animal Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:59.449Z",
+      "output_path": "output/word-search/20260627225346-009",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225346-010",
+      "category": "word-search",
+      "title": "Fruit Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:59.703Z",
+      "output_path": "output/word-search/20260627225346-010",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225346-011",
+      "category": "word-search",
+      "title": "Ocean Word Search Vol. 1",
+      "created_at": "2026-06-27T22:53:59.929Z",
+      "output_path": "output/word-search/20260627225346-011",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225346-012",
+      "category": "word-search",
+      "title": "Weather Word Search Vol. 1",
+      "created_at": "2026-06-27T22:54:00.158Z",
+      "output_path": "output/word-search/20260627225346-012",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260627225346-013",
+      "category": "word-search",
+      "title": "Kitchen Word Search Vol. 1",
+      "created_at": "2026-06-27T22:54:00.384Z",
+      "output_path": "output/word-search/20260627225346-013",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
     }
   ],
-  "last_batch_at": "2026-06-24T14:57:37.556Z"
+  "last_batch_at": "2026-06-27T22:53:46.374Z"
 }

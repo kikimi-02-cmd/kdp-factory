@@ -24,6 +24,10 @@ export interface MetadataInput {
   pageCount: number;
   interiorPath: string;
   bookNumber?: number;
+  // Edition differentiation (avoids KDP duplicate-content flags when batching).
+  titleNoun?: string; // e.g. "Large Print Sudoku for Seniors"
+  audience?: string; // e.g. "Beginners" | "Seniors" | "Experts"
+  largePrint?: boolean;
 }
 
 const DEFAULT_AUTHOR = "Puzzle Press";
@@ -45,24 +49,28 @@ export function buildMetadata(input: MetadataInput): KdpMetadata {
   const author = input.author ?? DEFAULT_AUTHOR;
   const diffLabel = difficultyLabel(input.difficulty);
   const vol = input.bookNumber ? ` Vol. ${input.bookNumber}` : "";
+  const audience = input.audience ?? "Adults";
+  const lp = input.largePrint ? "Large Print " : "";
 
-  const title = `Sudoku Puzzle Book${vol}`;
-  const subtitle = `${input.puzzleCount} ${diffLabel} Puzzles for Adults with Solutions`;
+  const title = `${input.titleNoun ?? "Sudoku Puzzle Book"}${vol}`;
+  const subtitle = `${input.puzzleCount} ${diffLabel} ${lp}Sudoku Puzzles for ${audience} with Solutions`;
 
   const description = [
-    `Sharpen your mind with ${input.puzzleCount} hand-checked sudoku puzzles ranging from ${diffLabel.toLowerCase()} difficulty.`,
+    `Sharpen your mind with ${input.puzzleCount} hand-checked sudoku puzzles at ${diffLabel.toLowerCase()} difficulty${input.audience ? `, made with ${audience.toLowerCase()} in mind` : ""}.`,
     `Every puzzle is guaranteed to have one unique solution, so you can solve with confidence.`,
-    `Printed one puzzle per page on large, easy-to-read grids with plenty of room for notes, plus a complete answer key in the back.`,
+    input.largePrint
+      ? `Printed extra-large, one puzzle per page on big, easy-to-read grids that are gentle on the eyes, plus a complete answer key in the back.`
+      : `Printed one puzzle per page on large, easy-to-read grids with plenty of room for notes, plus a complete answer key in the back.`,
     `A perfect gift for puzzle lovers, commuters, and anyone who wants to keep their brain active.`,
   ].join(" ");
 
   const keywords = [
-    "sudoku puzzle book",
-    "sudoku for adults",
+    input.largePrint ? "large print sudoku" : "sudoku puzzle book",
+    `sudoku for ${audience.toLowerCase()}`,
     `${diffLabel.toLowerCase()} sudoku`,
     "brain games",
     "logic puzzles",
-    "large print sudoku",
+    input.largePrint ? "large print puzzle book" : "sudoku for adults",
     "puzzle book with solutions",
   ];
 
@@ -95,6 +103,9 @@ export interface WordSearchMetadataInput {
   interiorPath: string;
   bookNumber?: number;
   themes?: string[]; // distinct themes used across the book
+  titleNoun?: string; // edition title, e.g. "Animal Word Search"
+  themeLabel?: string; // e.g. "Animal" for single-theme editions
+  largePrint?: boolean;
 }
 
 function wsDifficultyLabel(d: WSDifficulty | "mixed"): string {
@@ -116,24 +127,26 @@ export function buildWordSearchMetadata(
   const author = input.author ?? DEFAULT_AUTHOR;
   const diffLabel = wsDifficultyLabel(input.difficulty);
   const vol = input.bookNumber ? ` Vol. ${input.bookNumber}` : "";
+  const lp = input.largePrint ? "Large Print " : "";
+  const themed = input.themeLabel ? `${input.themeLabel.toLowerCase()} ` : "themed ";
 
-  const title = `Word Search Puzzle Book${vol}`;
-  const subtitle = `${input.puzzleCount} ${diffLabel} Word Search Puzzles for Adults with Solutions`;
+  const title = `${input.titleNoun ?? "Word Search Puzzle Book"}${vol}`;
+  const subtitle = `${input.puzzleCount} ${diffLabel} ${lp}${input.themeLabel ?? "Themed"} Word Search Puzzles for Adults with Solutions`;
 
   const description = [
-    `Relax and stay sharp with ${input.puzzleCount} themed word search puzzles ranging across ${diffLabel.toLowerCase()} difficulty.`,
+    `Relax and stay sharp with ${input.puzzleCount} ${themed}word search puzzles at ${diffLabel.toLowerCase()} difficulty.`,
     `Every word is guaranteed to be hidden in its grid, with a full answer key listing each word's location.`,
-    `Printed one puzzle per page on large, easy-to-read letter grids, with the theme word list right below each puzzle.`,
+    `Printed one puzzle per page on ${input.largePrint ? "extra-large" : "large"}, easy-to-read letter grids, with the word list right below each puzzle.`,
     `A perfect gift for word puzzle lovers, travelers, and anyone who wants a calming brain workout.`,
   ].join(" ");
 
   const keywords = [
-    "word search puzzle book",
+    input.themeLabel ? `${input.themeLabel.toLowerCase()} word search` : "word search puzzle book",
     "word search for adults",
     `${diffLabel.toLowerCase()} word search`,
     "brain games",
     "word find puzzles",
-    "large print word search",
+    input.largePrint ? "large print word search" : "word search book",
     "puzzle book with solutions",
   ];
 

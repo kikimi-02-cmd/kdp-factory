@@ -16,6 +16,7 @@ import {
   type WordSearchBookPuzzle,
 } from "./pdf.js";
 import { buildMetadata, buildWordSearchMetadata } from "./metadata.js";
+import { editionsFor, type Edition } from "./editions.js";
 import { appendBooks, type BookRecord } from "./state.js";
 
 const [, , cmd, ...rest] = process.argv;
@@ -32,6 +33,10 @@ function help() {
                                              Generate N books in a category
   generate --batch <N> [--category <name>] [...same flags]
                                              Alias for --count <N> (batch run)
+  generate --catalog [--category <name>] [--count <n>] [--author <name>]
+                                             Generate distinct-SKU editions from the catalog
+                                             (differentiated titles/niches; --count repeats as
+                                             Vol.2,3... never identical duplicates → no KDP flags)
   list-categories                            Show available categories
   --help                                     Show this help
 
@@ -105,38 +110,54 @@ async function generate(args: string[]) {
     process.exit(1);
   }
 
+  // --catalog: walk the distinct-SKU edition catalog (differentiated titles /
+  // niches) instead of N identical "Vol. N" books. Repeats become Vol.2/3 of the
+  // same edition (a legit series), never byte-identical duplicates (KDP flag risk).
+  const catalog = flags.catalog !== undefined && flags.catalog !== "false";
+  const editions = catalog ? editionsFor(flags.category) : [];
+  if (catalog && editions.length === 0) {
+    console.error(`No editions for category "${flags.category}".`);
+    process.exit(1);
+  }
+  const hasExplicitCount = flags.batch !== undefined || flags.count !== undefined;
+  const totalBooks = catalog && !hasExplicitCount ? editions.length : count;
+
   const batch = slugTimestamp();
   const batchAt = new Date().toISOString();
   const records: BookRecord[] = [];
+  const volByEdition = new Map<string, number>();
 
-  for (let b = 0; b < count; b++) {
-    const bookNumber = b + 1;
-    const bookId = `${batch}-${String(bookNumber).padStart(3, "0")}`;
-    const outDir = join(ROOT, "output", category, bookId);
+  for (let b = 0; b < totalBooks; b++) {
+    const edition = catalog ? editions[b % editions.length] : undefined;
+    const cat = edition ? edition.category : category;
+    let bookNumber: number;
+    if (edition) {
+      bookNumber = (volByEdition.get(edition.key) ?? 0) + 1;
+      volByEdition.set(edition.key, bookNumber);
+    } else {
+      bookNumber = b + 1;
+    }
+    const bookId = `${batch}-${String(b + 1).padStart(3, "0")}`;
+    const outDir = join(ROOT, "output", cat, bookId);
     await mkdir(outDir, { recursive: true });
 
+    const bookArgs: BookArgs = {
+      outDir,
+      bookId,
+      bookNumber,
+      perBook,
+      difficultyMode: edition ? String(edition.difficulty) : difficultyMode,
+      author,
+      edition,
+    };
     const record =
-      category === "word-search"
-        ? await generateWordSearchBook({
-            outDir,
-            bookId,
-            bookNumber,
-            perBook,
-            difficultyMode,
-            author,
-          })
-        : await generateSudokuBook({
-            outDir,
-            bookId,
-            bookNumber,
-            perBook,
-            difficultyMode,
-            author,
-          });
+      cat === "word-search"
+        ? await generateWordSearchBook(bookArgs)
+        : await generateSudokuBook(bookArgs);
 
     records.push(record);
     console.log(
-      `[${bookNumber}/${count}] ${bookId}: ${record.puzzle_count} puzzles, ${record.page_count} pages -> ${record.output_path}/`,
+      `[${b + 1}/${totalBooks}] ${bookId} — ${record.title}: ${record.puzzle_count} puzzles, ${record.page_count} pages`,
     );
   }
 
@@ -146,7 +167,7 @@ async function generate(args: string[]) {
     `State updated: ${records.length} book(s) appended (total ${state.books.length}), last_batch_at=${batchAt}.`,
   );
 
-  console.log(`Done. Generated ${count} book(s). Generation only — nothing published.`);
+  console.log(`Done. Generated ${totalBooks} book(s). Generation only — nothing published.`);
 }
 
 interface BookArgs {
@@ -156,6 +177,7 @@ interface BookArgs {
   perBook: number;
   difficultyMode: string;
   author?: string;
+  edition?: Edition;
 }
 
 async function generateSudokuBook(a: BookArgs): Promise<BookRecord> {
@@ -166,24 +188,11 @@ async function generateSudokuBook(a: BookArgs): Promise<BookRecord> {
     puzzles.push({ index: i + 1, difficulty, puzzle, solution });
   }
 
-  const title = `Sudoku Puzzle Book Vol. ${a.bookNumber}`;
-  const diffLabel =
-    a.difficultyMode === "mixed" ? "Easy to Hard" : capitalize(a.difficultyMode);
-  const subtitle = `${a.perBook} ${diffLabel} Puzzles for Adults with Solutions`;
-
-  const pdfBytes = await renderBookPdf({
-    title,
-    subtitle,
-    author: a.author ?? "Puzzle Press",
-    puzzles,
-  });
-
-  await writeFile(join(a.outDir, "interior.pdf"), pdfBytes);
-
   // 1 title + perBook puzzle pages + 1 solutions divider + ceil(perBook/6) solution pages
   const solutionPages = Math.ceil(a.perBook / 6);
   const pageCount = 1 + a.perBook + 1 + solutionPages;
 
+  // Build metadata first so title/subtitle drive the interior AND the cover (consistency).
   const metadata = buildMetadata({
     author: a.author,
     puzzleCount: a.perBook,
@@ -191,11 +200,22 @@ async function generateSudokuBook(a: BookArgs): Promise<BookRecord> {
     pageCount,
     interiorPath: "interior.pdf",
     bookNumber: a.bookNumber,
+    titleNoun: a.edition?.titleNoun,
+    audience: a.edition?.audience,
+    largePrint: a.edition?.largePrint,
   });
 
+  const pdfBytes = await renderBookPdf({
+    title: metadata.title,
+    subtitle: metadata.subtitle,
+    author: a.author ?? "Puzzle Press",
+    puzzles,
+  });
+  await writeFile(join(a.outDir, "interior.pdf"), pdfBytes);
+
   const coverBytes = await renderCoverPdf({
-    title,
-    subtitle,
+    title: metadata.title,
+    subtitle: metadata.subtitle,
     author: a.author ?? "Puzzle Press",
     backBlurb: metadata.description,
     pageCount,
@@ -238,8 +258,8 @@ async function generateWordSearchBook(a: BookArgs): Promise<BookRecord> {
   const themesUsed = new Set<string>();
   for (let i = 0; i < a.perBook; i++) {
     const difficulty = pickWs(i);
-    // rotate themes across the built-in banks for variety
-    const theme = WORD_BANK_NAMES[i % WORD_BANK_NAMES.length];
+    // Themed edition → one theme for the whole book; otherwise rotate banks.
+    const theme = a.edition?.theme ?? WORD_BANK_NAMES[i % WORD_BANK_NAMES.length];
     const puzzle = makeWordSearch(difficulty, theme);
     // integrity guard: regenerate if a puzzle is somehow inconsistent
     if (!isValidWordSearch(puzzle)) {
@@ -248,20 +268,6 @@ async function generateWordSearchBook(a: BookArgs): Promise<BookRecord> {
     themesUsed.add(puzzle.theme);
     puzzles.push({ index: i + 1, puzzle });
   }
-
-  const title = `Word Search Puzzle Book Vol. ${a.bookNumber}`;
-  const diffLabel =
-    a.difficultyMode === "mixed" ? "Easy to Hard" : capitalize(a.difficultyMode);
-  const subtitle = `${a.perBook} ${diffLabel} Word Search Puzzles for Adults with Solutions`;
-
-  const pdfBytes = await renderWordSearchPdf({
-    title,
-    subtitle,
-    author: a.author ?? "Puzzle Press",
-    puzzles,
-  });
-
-  await writeFile(join(a.outDir, "interior.pdf"), pdfBytes);
 
   // 1 title + perBook puzzle pages + 1 solutions divider + >=1 solution list page
   const pageCount = 1 + a.perBook + 1 + Math.max(1, Math.ceil(a.perBook / 8));
@@ -274,11 +280,22 @@ async function generateWordSearchBook(a: BookArgs): Promise<BookRecord> {
     interiorPath: "interior.pdf",
     bookNumber: a.bookNumber,
     themes: [...themesUsed],
+    titleNoun: a.edition?.titleNoun,
+    themeLabel: a.edition?.themeLabel,
+    largePrint: a.edition?.largePrint,
   });
 
+  const pdfBytes = await renderWordSearchPdf({
+    title: metadata.title,
+    subtitle: metadata.subtitle,
+    author: a.author ?? "Puzzle Press",
+    puzzles,
+  });
+  await writeFile(join(a.outDir, "interior.pdf"), pdfBytes);
+
   const coverBytes = await renderCoverPdf({
-    title,
-    subtitle,
+    title: metadata.title,
+    subtitle: metadata.subtitle,
     author: a.author ?? "Puzzle Press",
     backBlurb: metadata.description,
     pageCount,
