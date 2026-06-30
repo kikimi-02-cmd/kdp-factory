@@ -4,7 +4,7 @@
   "enabled": true,
   "mode": "live",
   "autonomy": "balanced",
-  "cadence_cron": "0 23 * * 1",
+  "cadence_cron": "20 21 * * 6",
   "north_star": "月次出版冊数とロングテール印税の最大化 — 毎週 generate した本の冊数と KDP ダッシュボード上の累計印税額",
   "guardrails": [
     "量産テンプレート（sudoku レイアウト・メタデータ schema）との整合性を破壊しない",
