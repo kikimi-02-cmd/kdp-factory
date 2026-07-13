@@ -800,7 +800,207 @@
       "puzzle_count": 50,
       "page_count": 59,
       "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-001",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 1",
+      "created_at": "2026-07-13T22:56:28.480Z",
+      "output_path": "output/sudoku/20260713225627-001",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-002",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 2",
+      "created_at": "2026-07-13T22:56:29.769Z",
+      "output_path": "output/sudoku/20260713225627-002",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-003",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 3",
+      "created_at": "2026-07-13T22:56:31.199Z",
+      "output_path": "output/sudoku/20260713225627-003",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-004",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 4",
+      "created_at": "2026-07-13T22:56:32.155Z",
+      "output_path": "output/sudoku/20260713225627-004",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-005",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 5",
+      "created_at": "2026-07-13T22:56:34.146Z",
+      "output_path": "output/sudoku/20260713225627-005",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-006",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 6",
+      "created_at": "2026-07-13T22:56:36.253Z",
+      "output_path": "output/sudoku/20260713225627-006",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-007",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 7",
+      "created_at": "2026-07-13T22:56:37.326Z",
+      "output_path": "output/sudoku/20260713225627-007",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-008",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 8",
+      "created_at": "2026-07-13T22:56:39.002Z",
+      "output_path": "output/sudoku/20260713225627-008",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-009",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 9",
+      "created_at": "2026-07-13T22:56:40.002Z",
+      "output_path": "output/sudoku/20260713225627-009",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225627-010",
+      "category": "sudoku",
+      "title": "Sudoku Puzzle Book Vol. 10",
+      "created_at": "2026-07-13T22:56:41.917Z",
+      "output_path": "output/sudoku/20260713225627-010",
+      "puzzle_count": 50,
+      "page_count": 61,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-001",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 1",
+      "created_at": "2026-07-13T22:56:43.024Z",
+      "output_path": "output/word-search/20260713225642-001",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-002",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 2",
+      "created_at": "2026-07-13T22:56:43.251Z",
+      "output_path": "output/word-search/20260713225642-002",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-003",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 3",
+      "created_at": "2026-07-13T22:56:43.465Z",
+      "output_path": "output/word-search/20260713225642-003",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-004",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 4",
+      "created_at": "2026-07-13T22:56:43.681Z",
+      "output_path": "output/word-search/20260713225642-004",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-005",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 5",
+      "created_at": "2026-07-13T22:56:43.894Z",
+      "output_path": "output/word-search/20260713225642-005",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-006",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 6",
+      "created_at": "2026-07-13T22:56:44.107Z",
+      "output_path": "output/word-search/20260713225642-006",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-007",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 7",
+      "created_at": "2026-07-13T22:56:44.338Z",
+      "output_path": "output/word-search/20260713225642-007",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-008",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 8",
+      "created_at": "2026-07-13T22:56:44.549Z",
+      "output_path": "output/word-search/20260713225642-008",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-009",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 9",
+      "created_at": "2026-07-13T22:56:44.763Z",
+      "output_path": "output/word-search/20260713225642-009",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
+    },
+    {
+      "id": "20260713225642-010",
+      "category": "word-search",
+      "title": "Word Search Puzzle Book Vol. 10",
+      "created_at": "2026-07-13T22:56:44.967Z",
+      "output_path": "output/word-search/20260713225642-010",
+      "puzzle_count": 50,
+      "page_count": 59,
+      "difficulty": "Easy to Hard"
     }
   ],
-  "last_batch_at": "2026-07-06T23:09:17.110Z"
+  "last_batch_at": "2026-07-13T22:56:42.573Z"
 }
