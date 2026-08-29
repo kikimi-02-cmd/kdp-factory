@@ -1,5 +1,9 @@
 # kdp-factory
 
+> **⚠️ 2026-08-29 Owner 裁定: KDP パズルジャンルは恒久不可（過去に失敗済み）。再提案禁止。**
+> 週次バッチ (schedule) は停止済み（workflow_dispatch のみ残置）。経緯は
+> tetsuya-os-canon `drafts/2026-08-29-spark-cowork-dispatch-asset-plan.md` v5。
+
 Low-content KDP book generation pipeline.
 See `claude-harness/proposals/passive-income/2026-05-13-architecture.md` (M+3 onwards).
 

@@ -12,10 +12,10 @@ name: kdp-batch-weekly
 #  3) state/kdp-factory.json の台帳更新のみ default ブランチへ commit
 #     (output/ は .gitignore 対象なので commit されない)。
 
+# 2026-08-29 Owner 裁定: KDP パズルジャンルは恒久不可 (過去に失敗済み・再提案禁止)。
+# 週次の定期生成 (schedule) を停止し、手動 workflow_dispatch のみ残置。
+# 経緯: tetsuya-os-canon drafts/2026-08-29-spark-cowork-dispatch-asset-plan.md v5
 on:
-  schedule:
-    # 毎週月曜 22:00 UTC。GitHub Actions cron 遅延 (0-3h) は許容。
-    - cron: '0 22 * * 1'
   workflow_dispatch:
     inputs:
       batch:
