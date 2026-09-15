@@ -13,9 +13,10 @@ name: kdp-batch-weekly
 #     (output/ は .gitignore 対象なので commit されない)。
 
 on:
-  schedule:
-    # 毎週月曜 22:00 UTC。GitHub Actions cron 遅延 (0-3h) は許容。
-    - cron: '0 22 * * 1'
+# 2026-09-14 Telegram 断捨離 (Owner 決裁): 定期実行を停止。再開はコメント解除 1 PR。
+#   schedule:
+#     # 毎週月曜 22:00 UTC。GitHub Actions cron 遅延 (0-3h) は許容。
+#     - cron: '0 22 * * 1'
   workflow_dispatch:
     inputs:
       batch:
